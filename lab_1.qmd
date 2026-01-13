@@ -1,11 +1,38 @@
 ---
-title: "STATS 531 Homework 1"
+title: "EPID 638/CMPLXSYS 530 Lab 1"
 author: Luka Todorovic
 date: "January 18, 2026"
 format:
-  pdf:
-    toc: true
-    number-sections: true
+  html:
+    toc: false
+    number-sections: false
     colorlinks: true
+jupyter: python3
 ---
 
+# Problem 1
+
+### A
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+r = np.arange(0, 2, 0.01)
+theta = 2 * np.pi * r
+fig, ax = plt.subplots(
+  subplot_kw = {'projection': 'polar'}
+)
+ax.plot(theta, r)
+ax.set_rticks([0.5, 1, 1.5, 2])
+ax.grid(True)
+plt.show()
+```
+
+
+
+### B
+
+### C
+
+### D
