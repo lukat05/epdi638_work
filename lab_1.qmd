@@ -1,0 +1,11 @@
+---
+title: "STATS 531 Homework 1"
+author: Luka Todorovic
+date: "January 18, 2026"
+format:
+  pdf:
+    toc: true
+    number-sections: true
+    colorlinks: true
+---
+
