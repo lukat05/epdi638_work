@@ -1,38 +1,199 @@
 ---
 title: "EPID 638/CMPLXSYS 530 Lab 1"
 author: Luka Todorovic
-date: "January 18, 2026"
+date: "January 28, 2026"
 format:
   html:
     toc: false
-    number-sections: false
+    number-sections: true
     colorlinks: true
 jupyter: python3
 ---
 
-# Problem 1
+# Part 1: Emoji Simulator
 
-### A
+## Problem One: The Schelling Model
 
-```{python}
-import numpy as np
-import matplotlib.pyplot as plt
+### Part A
 
-r = np.arange(0, 2, 0.01)
-theta = 2 * np.pi * r
-fig, ax = plt.subplots(
-  subplot_kw = {'projection': 'polar'}
-)
-ax.plot(theta, r)
-ax.set_rticks([0.5, 1, 1.5, 2])
-ax.grid(True)
-plt.show()
-```
+You can view my model down below! Please note, **This is a bit glitchy**, use the "Step" button to figure
+it out. **<big><span style="
+  background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+">
+  Enjoy!
+</span></big>**
 
+<iframe width="800" height="452" src="https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAEQE9iYxt0YAbAAgCEjHCBzSgGmYBGAVyjMwMANYRm2UbkKNZ9JgDoQvEEkwwA7ggAMGgGa5UCAIwbcjGJQRRMQiAF8NqWFDQIA2qGxIDDXoSMkA+DcAo3fUQGkgyADFCAA8omHQCEjN4XxBUbC5SeBAAHijiITAEACY3DwgASXJAkFT04kzs1FxUiDJzKM7CKABlWoaySqjGCBgANwgRmE8xwomNKEpcHsKwQjmAfShCEGcAXTWNrZBsIz3iCDyACwFCTGOzzTQsPFayB4hGTgyZi0QQ2YgSY68PwBeCWK7oEKFQC8G4AGHdKtEuACUYAIBLIoigMDh8EQCiAAMKKdASGQI4jMABkzC67mk2Hpdx0zAgOwAVth4AAdYgAWVS8GZmDQqGYdIcCgA1AiwOJiEgFZ1usKAPJQP6YCUI3CUZhGTCEMDMACifLwECQ2BgKheXBSaVJ7VAuXyZBKGjKFXg1Ryo0ahT6GhaHp8Xq66EuEZy8mGofGk2mcwWSzDIFWIHWmzIO32hze50LhWut3uXCeLzermhVSCdLI6NihR5+DsGkJXxJiIpVJpwXpTJZnhkHIgXJ5hH5QtF4sl0tlJHljCVFtV6s18Z1eogBrXxtN5stNvndodTpdbta7ROpw0OhejBhoCEuCQi0uuTAQiMLAdyEEIZj+jWdaYA8hCEDC4CwVKUS4Oa8iYA+MYhr+yyGCAXToZkADMAAsjZYdmFhWDABEICRZHuNhYbBvhUBEYRz45NgABeWygDo-h6rRuF-I8UBCc4ElAA" frameborder="0"></iframe>
 
+So, as demonstrated in class, we see that it self-organizes pretty
 
-### B
+<br>
 
-### C
+### Part B
 
-### D
+Here's the model for requiring **<big> ONE </big>** neighbor
+
+<iframe width="800" height="452" src="https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAEQE9iYxt0YAbAAgCEjHCBzSgGmYBGAVyjMwMANYRm2UbkKNZ9JgDoQvEEkwwA7ggAMGgGa5UCAIwbcjGJQRRMQiAF8NqWFDQIA2qGxIDDXoSMkA+DcAo3fUQGkgyADFCAA8omHQCEjN4XxBUbC5SeBAAHijiITALNw8IAElyQJBU9OJM7NRcVIgycyj2wigAZWq6sgAmKMYIGAA3CCGYTxHC8Y0oSlwuwrBCWYB9KEIUtKIWnwBdZzPV9c2QbCNd4gg8gAsBQkwQS40UDBx8E5kF4QRicGTMWiCGzECRfXh+ALwSx3dAhQqAXg3AAw7pVotwASjABAJZFFflg8M0yABhRToCQyVHEZgAMmYHXc0mwTKeOmYEG2ACtsPAADrEACyqXgbMwaFQzEZDgUAGpUWBxMQkMr2p0xQB5KDAzDS1G4SjMIyYQhgZgAUUFeAgSGwMBUHy4R2arVAuXyZBKGjKFSRVQWtXqhR6GiaJ29OQ66FuUfj-XmiwjIBWIEmMzmwwzWbWGzI2z2B09sfO3xARdu90ezy4bw+Xwu8LuiNGQUZZBxsUK-Pwdh+aHJALRIBp9HpwSZrPZnhk3IgvP5hCFoolUplcoVJCVjFV1o1Wp1if1hogxr3ZotVpt9vXjudrvdFYyVauIB0H0YiNAQi4EgYZkLkYBCIwsBPIQQhmIGjbNpgLyEIQiLgChspRLgVryJgXo+D6+YNB0eGZAAzAALK4hFhksyIkVA5FUe27i0RGXYgAx5FkdWuQAF6bKAOj+IaCBkYYIDAq8UBifozjyUAA" frameborder="0"></iframe>
+
+It self organizes pretty quickly, which makes a lot of sense because thye're not that picky so long as they have a
+friend. Kind of like joining a new **<span style="color:purple;">discord</span>** server, you usually only know the
+person who invited you, but you don't wanna leave and hurt their <span style="
+  background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+">feelings</span>!
+
+<br>
+
+Here's the model for requiring **<big> FOUR </big>** neighbors
+
+<iframe width="800" height="452" src="https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAEQE9iYxt0YAbAAgCEjHCBzSgGmYBGAVyjMwMANYRm2UbkKNZ9JgDoQvEEkwwA7ggAMGgGa5UCAIwBODbkYxKCKJiEQAvhtSwoaBAG1Q2EgGGvQkZIB8G4BRu+ogNJBkAGKEAB4xMOgEJGbw-iCo2Fyk8CAAPDHEQmAIACweXhAAkuTBIOmZxNm5qLjpEGTmMd2EUADK9U1kAEwxjBAwAG4QYzDeE8XTGlCUuH3FYISLAPpQhGkZRB1+ALquV5vbuyDYRofEEAUAFgKEmCC3GigMDh8BcyB8IIxODJmLRBHZiBI-rwAkF4OYQugwsVALwbgAYd8q0R4AJRgAgEshigKweHaZAAwop0BIZJjiMwAGTMHqeaTYNlvHTMCD7ABW2HgAB1iABZdLwLmYNCoZispwKADUmLA4mISHV3V6UoA8lBwZh5ZjcJRmEZMIQwMwAKKivAQJDYGAqH5cM7tTqgfKFMhlDQVKrwWp5cbNYoDDRtC7+vI9dCPOPJ4bLVYxkAbECzBZLaNTGJbHZkfZHE6+xPXf4gMuPZ6vd5cL4-P43ZFPVGTDFYkAE+LFYX4BwAtDUkEDhn0ZmhNmc7neGT8iCC4WEMWSmVyhVKlUkNWMTX2nV6g2p42miDmw9Wm12h3Oreu92e701rJ1u4gHQ-RhUVAIRcCQFZHnyMAhEYWA3kIIQzFDVt20wD5CEIVFwHQxUYlwO15EwP0-ADYt4EMEAekI7IAGZqncEjwLWdEKJgKiEFo+io0YmM+xYtj4Go6j63yAAvXZQB0QJTXY8jwU+KAZNcJSgA" frameborder="0"></iframe>
+
+**<big><span style="
+  background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+">WOW!</span></big>** So I noticed a pattern where they segregate into larger clusters, and you can kind of see it with
+the differences in the model requiring one neighbor versus two neighbors. I could check this in a full gradient for you,
+but that would be **A WASTE OF SPACE** (Also I'm lazy)
+
+Also, notice that there are somethimes stragglers who *refuse* to conform to ***Society*** because they like to have <span style="
+  background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+">Different view points</span> Before inevitably falling into a more comfortable position (well, technically it's not
+recurrent, but let's pretend like it is)
+
+<br>
+
+Here's the model for requiring **<big> SIX </big>** neighbors (It is here where I issue an **EPILEPSY WARNING** from
+here onward)
+
+<iframe width="800" height="452" src="https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAEQE9iYxt0YAbAAgCEjHCBzSgGmYBGAVyjMwMANYRm2UbkKNZ9JgDoQvEEkwwA7ggAMGgGa5UCAIwbcjGJQRRMQiAF8NqWFDQIA2qGxIDDXoSMkA+DcAo3fUQGkgyADFCAA8omHQCEjN4XxBUbC5SeBAAHijiITAEADY3DwgASXJAkFT04kzs1FxUiDJzKM7CKABlWoayACYoxggYADcIEZhPMcLJjShKXB7CsEJ5gH0oQhS0ojafAF1nC-XN7ZBsI33iCDyACwFCTBBrjRQMHD4M5kN4QRicGTMWiCGzECQ-Xh+ALwSwPdAhQqAXg3AAw7pVo9wASjABAJZFF-lg8K0yABhRToCQydHEZgAMmYXXc0mwLJeOmYEF2ACtsPAADrEACyqXgHMwaFQzGZDgUAGp0WBxMQkKrOt0JQB5KCgzCy9G4SjMIyYQhgZgAUWFeAgSGwMBUXy4J1a7VAuXyZBKGjKFXg1Ryo0ahT6GhaZ19OS66HuMcTg0WyyjIDWIGmcwWkYmUQ2WzIuwOR298cuvxAJfuj2ery4Hy+PyuiIeyPGQWZZDxsUKgvwdj+aEpQIxIDp9EZwRZ7M5nhkvIg-MFhBF4qlMrlCqVJBVjHVtq1Or1ycNxogpoPFqtNrtjs3ztd7s9VYyNZuIB0X0YyKgEIuBIEs9y5GAQiMLALyEEIZjBs2raYG8hCEMi4BofKUS4Da8iYD6Ph+oW8CGCAXQEZkADMVGuMRYErKiFFQNRtGdu4DFRj25EwJRCBUQALLWuQAF7bKAOj+Ma-FkaC7xQDJzhKUAA" frameborder="0"></iframe>
+
+For the full effect, turn the speed up to the *~30-60%*. Now, we notice that it turns into a... mess? Well, overall it
+does. **BUT**(t), we have it that there are <span style="color:green;">temporary clusters</span> that pop up, so we can
+hypothesize pretty reasonably that with our grid sizes and initial conditions, it will be non-recurrently unstable at
+six neighbors. Lesson to be learned: **Don't be closed minded**
+
+<br>
+
+Here's the model for requiring **<big> EIGHT </big>** neighbors
+
+<iframe width="800" height="452" src="https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAEQE9iYxt0YAbAAgCEjHCBzSgGmYBGAVyjMwMANYRm2UbkKNZ9JgDoQvEEkwwA7ggAMGgGa5UCAIwbcjGJQRRMQiAF8NqWFDQIA2qGxIDDXoSMkA+DcAo3fUQGkgyADFCAA8omHQCEjN4XxBUbC5SeBAAHijiITAEAA43DwgASXJAkFT04kzs1FxUiDJzKM7CKABlWoayACYoxggYADcIEZhPMcLJjShKXB7CsEJ5gH0oQhS0ojafAF1nC-XN7ZBsI33iCDyACwFCTBBrjRQMHD4M5kN4QRicGTMWiCGzECQ-Xh+ALwSwPdAhQqAXg3AAw7pVo9wASjABAJZFF-lg8K0yABhRToCQydHEZgAMmYXXc0mwLJeOmYEF2ACtsPAADrEACyqXgHMwaFQzGZDgUAGp0WBxMQkKrOt0JQB5KCgzCy9G4SjMIyYQhgZgAUWFeAgSGwMBUXy4J1a7VAuXyZBKGjKFXg1Ryo0ahT6GhaZ19OS66HuMcTg0WyyjIDWIGmcwWkYmUQ2WzIuwOR298cuvxAJfuj2ery4Hy+PyuiIeyPGQWZZDxsUKgvwdj+aEpQIxIDp9EZwRZ7M5nhkvIg-MFhBF4qlMrlCqVJBVjHVtq1Or1ycNxogpoPFqtNrtjs3ztd7s9VYyNZuIB0X0YyKgEIuBIEs9y5GAQiMLALyEEIZjBs2raYG8hCEMi4BofKUS4Da8iYD6Ph+oW8CGCAXQEZkADMVGuMRYErKiFFQNRtGdu4DFRj25EwJRCBUQALLWuQAF7bKAOj+Ma-FkaC7xQDJzhKUAA" frameborder="0"></iframe>
+
+***Yeah***, I'm not even gonna comment here...
+
+<br>
+
+### Part C
+
+I found requiring 4 neighbors to be the most interesting in the previous part, so I will be holding that throughout this
+part of the problem. We already checked equal ratio, and let's keep ~1/3 of the space to be empty. Thus, let's adjust
+the ratios:
+
+<br>
+
+Let's try ~**2:1** rabbits to foxes
+
+<iframe width="800" height="452" src="https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAEQE9iYxt0YAbAAgCEjHCBzSgGmYBGAVyjMwMANYRm2UbkKNZ9JgDoQvEEkwwA7ggAMGgGa5UCAEwB2DbkYxKCKJiEQAvhtSwoaBAG1Q2EgGGvQkZIB8G4BRu+ogNJBkAGKEAB4xMOgEJGbw-iCo2Fyk8CAAPDHEQmAIACweXhAAkuTBIOmZxNm5qLjpEGQAjDHdhFAAyvVNZOYxjBAwAG4Q4zDek8XTGlCUuH3FYISLAPpQhGkZRB1+ALquV5vbuyDYRofEEAUAFgKEmCC3GigMDh8BcyB8IIxODJmLRBHZiBI-rwAkF4P0QugwsVALwbgAYd8q0R4AJRgAgEshigKweHaZAAwop0BIZJjiMwAGTMHqeaTYNlvHTMCD7ABW2HgAB1iABZdLwLmYNCoZispwKADUmLA4mISHV3V6UoA8lBwZh5ZjcJRmEZMIQwMwAKKivAQJDYGAqH5cM7tTqgfKFMhlDQVKrwWp5CbNYqDDRtC7+vI9dCPOPJkbLVYxkAbECzBZLaNTGJbHZkfZHE6+xPXf4gMuPZ6vd5cL4-P43ZFPVHmDFYkAE+LFYX4BwAtDUkEDhn0ZmhNmc7neGT8iCC4WEMWSmVyhVKlUkNWMTX2nV6g2p42miDmw9Wm12h3Oreu92e701rJ1u4gHQ-RhUVAIRcCQFZHnyMAhEYWA3kIIQzFDVt20wD5CEIVFwHQxUYlwO15EwP0-ADYt4EMEAekI7JzH6dwSPAtZ0QomAqJqAAOOiowYmM+2Y1j4AAZlo398gAL12UAdECU0EAE8jwU+KBZP0VxVKAA" frameborder="0"></iframe>
+
+So it stabilizes like the 1:1, but the difference is that there are more stragglers of the minority. So if you're in a
+minority of opinion, it's harder to to find a community. (Do NOT tell them about <span style="color: #FF4500;">
+**Reddit**</span>)
+
+<br>
+
+Let's try ~**4:1** rabbits to foxes
+
+<iframe width="800" height="452" src="https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAEQE9iYxt0YAbAAgCEjHCBzSgGmYBGAVyjMwMANYRm2UbkKNZ9JgDoQvEEkwwA7ggAMGgGa5UCAIwAmDbkYxKCKJiEQAvhtSwoaBAG1Q2EgGGvQkZIB8G4BRu+ogNJBkAGKEAB4xMOgEJGbw-iCo2Fyk8CAAPDHEQmAIACweXhAAkuTBIOmZxNm5qLjpEGTmMd2EUADK9U1kljGMEDAAbhBjMN4TxVMaUJS4fcVghAsA+lCEaRlEHX4Auq6XG1s7INhGB8QQBQAWAoSYIDcaKBgcPhzmR3hBGJwZMxaII7MQJL9eAEgvBzCF0GFioBeDcADDvlWgPABKMAEAlkMQBWDw7TIAGFFOgJDIMcRmAAyZg9TzSbCs146ZgQPYAK2w8AAOsQALLpeCczBoVDMFlOBQAagxYHExCQau6vUlAHkoGDMHKMbhKMwjJhCGBmABREV4CBIbAwFTfLindqdUD5QpkMoaCpVeC1PLjZrFAYaNrnP15HroB6xpPDJYraMgdYgGbzRZRyYxTbbMh7Q7HH0Jq5-EClh5PF5vLifb6-a5Ix4o6yPFlkfHxYpC-AOf5oKnAzEgen0JmhVkcrneGR8iACoWEUUS6Wy+WK5UkVWMDV27W6-Upo0miBmw+W622+1Orcut0er3VrK124gHTfRgUVAIRcCQZYHnyMAhEYWBXkIIQzBDFs20wd5CEIFFwHQhUYlwW15EwX0-H9It4EMEAekI7IAHZ3BI8DVjRCiYCohAADZaK7TwGOjXtKKgbJLDYut8gALx2UAdECE0EAAZnIsEPigOT9FcNSgA" frameborder="0"></iframe>
+
+We now see that rabbits organize very quickly, and foxes eventually start to cluster. Wow! Let's now do this same thing,
+but **NOW** change the neighbors required.
+
+<br>
+
+Let's try ~**2:1** rabbits to foxes (6 Neighbors)
+
+<iframe width="800" height="452" src="https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAEQE9iYxt0YAbAAgCEjHCBzSgGmYBGAVyjMwMANYRm2UbkKNZ9JgDoQvEEkwwA7ggAMGgGa5UCAIwAmDbkYxKCKJiEQAvhtSwoaBAG1Q2EgGGvQkZIB8G4BRu+ogNJBkAGKEAB4xMOgEJGbw-iCo2Fyk8CAAPDHEQmAIAGweXhAAkuTBIOmZxNm5qLjpEGTmMd2EUADK9U1kljGMEDAAbhBjMN4TxVMaUJS4fcVghAsA+lCEaRlEHX4Auq6XG1s7INhGB8QQBQAWAoSYIDcaKBgcPhzmR3hBGJwZMxaII7MQJL9eAEgvBzCF0GFioBeDcADDvlWgPABKMAEAlkMQBWDw7TIAGFFOgJDIMcRmAAyZg9TzSbCs146ZgQPYAK2w8AAOsQALLpeCczBoVDMFlOBQAagxYHExCQau6vUlAHkoGDMHKMbhKMwjJhCGBmABREV4CBIbAwFTfLindqdUD5QpkMoaCpVeC1PLjZrFAYaNrnP15HroB6xpPDJYraMgdYgGbzRZRyYxTbbMh7Q7HH0Jq5-EClh5PF5vLifb6-a5Ix4o6yPFlkfHxYpC-AOf5oKnAzEgen0JmhVkcrneGR8iACoWEUUS6Wy+WK5UkVWMDV27W6-Upo0miBmw+W622+1Orcut0er3VrK124gHTfRgUVAIRcCQZYHnyMAhEYWBXkIIQzBDFs20wd5CEIFFwHQhUYlwW15EwX0-H9It4EMEAekI7JzAADncEjwNWNEKJgKiEAAVgAZnoyNGOjXtKKgbJLAATjrfIAC8dlAHRAhNBBOPIsEPigBT9FcDSgA" frameborder="0"></iframe>
+
+There is a big central cluster of bunnies... but it's not that big (*foreshadowing*)
+
+<br>
+
+Let's try ~**4:1** rabbits to foxes (6 Neighbors)
+
+<iframe width="800" height="452" src="https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAEQE9iYxt0YAbAAgCEjHCBzSgGmYBGAVyjMwMANYRm2UbkKNZ9JgDoQvEEkwwA7ggAMGgGa5UCAIwAmDbkYxKCKJiEQAvhtSwoaBAG1Q2EgGGvQkZIB8G4BRu+ogNJBkAGKEAB4xMOgEJGbw-iCo2Fyk8CAAPDHEQmAIAGweXhAAkuTBIOmZxNm5qLjpEGTmMd2EUADK9U1kljGMEDAAbhBjMN4TxVMaUJS4fcVghAsA+lCEaRlEHX4Auq6XG1s7INhGB8QQBQAWAoSYIDcaKBgcPhzmR3hBGJwZMxaII7MQJL9eAEgvBzCF0GFioBeDcADDvlWgPABKMAEAlkMQBWDw7TIAGFFOgJDIMcRmAAyZg9TzSbCs146ZgQPYAK2w8AAOsQALLpeCczBoVDMFlOBQAagxYHExCQau6vUlAHkoGDMHKMbhKMwjJhCGBmABREV4CBIbAwFTfLindqdUD5QpkMoaCpVeC1PLjZrFAYaNrnP15HroB6xpPDJYraMgdYgGbzRZRyYxTbbMh7Q7HH0Jq5-EClh5PF5vLifb6-a5Ix4o6yPFlkfHxYpC-AOf5oKnAzEgen0JmhVkcrneGR8iACoWEUUS6Wy+WK5UkVWMDV27W6-Upo0miBmw+W622+1Orcut0er3VrK124gHTfRgUVAIRcCQZYHnyMAhEYWBXkIIQzBDFs20wd5CEIFFwHQhUYlwW15EwX0-H9It4EMEAekI7IAHZ3BI8DVjRCiYCompaK7TwGOjXtKKgbJLGqOt8gALx2UAdECE0EAAZnIsEPigGT9FcFSgA" frameborder="0"></iframe>
+
+Would you LOOK at the size of those bunny clusters! It's not necessarily a stable cluster either, and I think it likely
+has to do with the boundaries wanting more people, but then exposing the next layer. It's non-paternalistic though,
+which is expected, though imagine how cool it would be if it *wasn't*...
+
+<br>
+
+Let's try ~**2:1** rabbits to foxes (2 Neighbors)
+
+<iframe width="800" height="452" src="https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAEQE9iYxt0YAbAAgCEjHCBzSgGmYBGAVyjMwMANYRm2UbkKNZ9JgDoQvEEkwwA7ggAMGgGa5UCAIwAmDbkYxKCKJiEQAvhtSwoaBAG1Q2EgGGvQkZIB8G4BRu+ogNJBkAGKEAB4xMOgEJGbw-iCo2Fyk8CAAPDHEQmAI1nleEACS5MEg6ZnE2bmouOkQZOYxXYRQAMp1jWSWMYwQMABuEKMw3uPFkxpQlLi9xWCE8wD6UIRpGUTtfgC6rhfrm9sg2Eb7xBAFABYChJgg1xooGDh8GcyG8IIxODJmLRBHZiBIfrwAkF4OYQugwsVALwbgAYd8q0e4AJRgAgEshi-yweDaZAAwop0BIZOjiMwAGTMbqeaTYFkvHTMCC7ABW2HgAB1iABZdLwDmYNCoZjMpwKADU6LA4mISFVXR6EoA8lBQZhZejcJRmEZMIQwMwAKLCvAQJDYGAqL5cE5tDqgfKFMhlDQVKrwGqeJYNJrFfoaVpnX15broe6xpNDRbLaMgNYgaZzBZjbO5jZbMi7A5Hb0Jy6-ECl+6PZ6vLgfL4-K6Ih7ImqhIogPHxYqC-AOP5oSlAjEgOn0Rl9tkcmBcmS8iD8wWEEXiqUyuUKpUkFWMdW2rU6vUpw3GiCmw8Wq02u2OrfO13uz3VrK1m4gHRfRhkVAIRcCQSMyHyMAhEYWAXkIIQzGDFs20wN5CEIZFwHQ+UYlwG15EwH0-D9Itmm6QjsnMAAOdwSMjFZURAcioGyABWABmWjano6MamY7JLAATjrfIAC9tlAHRAmNBB2MMEBQXeKBZP0Vw1KAA" frameborder="0"></iframe>
+
+It stabilizes... but it doesn't necessarily organize. Then again, these guys aren't really picky, so they mix better
+together.
+
+<br>
+
+Let's try ~**4:1** rabbits to foxes (2 Neighbors)
+
+<iframe width="800" height="452" src="https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAEQE9iYxt0YAbAAgCEjHCBzSgGmYBGAVyjMwMANYRm2UbkKNZ9JgDoQvEEkwwA7ggAMGgGa5UCAIwAmDbkYxKCKJiEQAvhtSwoaBAG1Q2EgGGvQkZIB8G4BRu+ogNJBkAGKEAB4xMOgEJGbw-iCo2Fyk8CAAPDHEQmAI1nleEACS5MEg6ZnE2bmouOkQZOYxXYRQAMp1jWSWMYwQMABuEKMw3uPFkxpQlLi9xWCE8wD6UIRpGUTtfgC6rhfrm9sg2Eb7xBAFABYChJgg1xooGDh8GcyG8IIxODJmLRBHZiBIfrwAkF4OYQugwsVALwbgAYd8q0e4AJRgAgEshi-yweDaZAAwop0BIZOjiMwAGTMbqeaTYFkvHTMCC7ABW2HgAB1iABZdLwDmYNCoZjMpwKADU6LA4mISFVXR6EoA8lBQZhZejcJRmEZMIQwMwAKLCvAQJDYGAqL5cE5tDqgfKFMhlDQVKrwGqeJYNJrFfoaVpnX15broe6xpNDRbLaMgNYgaZzBZjbO5jZbMi7A5Hb0Jy6-ECl+6PZ6vLgfL4-K6Ih7ImqhIogPHxYqC-AOP5oSlAjEgOn0Rl9tkcmBcmS8iD8wWEEXiqUyuUKpUkFWMdW2rU6vUpw3GiCmw8Wq02u2OrfO13uz3VrK1m4gHRfRhkVAIRcCQSMyHyMAhEYWAXkIIQzGDFs20wN5CEIZFwHQ+UYlwG15EwH0-D9Itmm6QjsgAdncEjIxWVEQHIqBsgANmorsIyzaobBgCjqhYut8gAL22UAdECY0EAAZkMEBQXeKBpP0VwVKAA" frameborder="0"></iframe>
+
+It stabilizes like the previous one, but it's more *organized*. Nice! So that means someone (not me) should test the five neighbor condition to
+see if that's the limit for stabilizing.
+
+<br>
+
+I would also probably like to try adjusting the ratio of neighbors required so they weren't equal, but like I said
+earlier, I'm **<big><span style="
+  background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+">
+  LAZY!!!
+</span></big>**
+
+### Part D
+
+Let's be honest, neither of us want to see me put ALL of those models back in, so for the sake of time we're just going
+to do a simpler version.
+
+Here's what happens for part A
+
+<iframe width="800" height="452" src="https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAEQE9iYxt0YAbAAgCEjHCBzSgGmYBGAVyjMwMANYRm2UbkKNZ9JgDoQvEEkwwA7ggAMGgGa5UCAIwAWDbkYxKCKJiEQAvhtSwoaBAG1Q2EgGGvQkZIB8G4BRu+ogNJBkAGKEAB4xMOgEJGbw-iCo2Fyk8CAAfDHEQmAIAEweXhAAkuRk5mkZRMTZuai46RAtMT2EUADK9U1k1TGMEDAAbhBjMN4TxVMaUJS4-cVghAsA+lCEbZmdfgC6rhcbWzsg2EYHxBAFABYChJgg1xooGDh8B0yG8IIxODJmLRBHZiBIfrwAkF4OYQugwsVALwbgAYd8q0e4AJRgAgEshi-yweDOZAAwop0BIZOjiMwAGTMXqeaTYFkvHTMCB7ABW2HgAB1iABZdLwDmYNCoZjMpwKADU6LA4mISFVPT6EoA8lBQZhZejcJRmEZMIQwMwAKLCvAQJDYGAqL5cU4dLqgfKFMhlDQVKrwWp5cbNYr6b1ZPx+3roe6tDzyUaRybTWYLJYrKMgdYgTbbMh7Q7HWPnHJXG5Fu5kR7PV5cD5fH5XREPZHh0JFEB4+LFQX4Bx-NCUoEYkB0+iM3tsjkwLkyXkQfmCwgi8VSmVyhVKkgqxjq21anV6pOG40QU0Hi1Wm12x2b52u92eytdGsaHRfRjI0AhFwJBlnufIwCERhYBeQghDMYNm1bTA3kIQhkXAVD5RiXAbXkTAzl9CNQNWQwQF6fDsgAZko9w-QzFEbBgCiEGo2iiLzGpGOY+BKMsX48mwAAvHZQB0QJjRY0jQXeKBJNceSgA" frameborder="0"></iframe>
+
+It stabilizes in a more choppy, albeit quick manner.
+
+<br>
+
+Part B:
+
+<iframe width="800" height="452" src="https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAEQE9iYxt0YAbAAgCEjHCBzSgGmYBGAVyjMwMANYRm2UbkKNZ9JgDoQvEEkwwA7ggAMGgGa5UCAIwAWDbkYxKCKJiEQAvhtSwoaBAG1Q2EgGGvQkZIB8G4BRu+ogNJBkAGKEAB4xMOgEJGbw-iCo2Fyk8CAAfDHEQmAI1nleEACS5GTmaRlExNm5qLjpEM0x3YRQAMp1jWQATDGMEDAAbhCjMN7jxVMaUJS4fcVghAsA+lCErZkdfgC6rhcbWzsg2EYHxBAFABYChJgg1xooGDh8O0yG8IIxODJmLRBHZiBIfrwAkF4OYQugwsVALwbgAYd8q0e4AJRgAgEshi-yweDOZAAwop0BIZOjiMwAGTMHqeaTYFkvHTMCB7ABW2HgAB1iABZdLwDmYNCoZjMpwKADU6LA4mISFV3V6EoA8lBQZhZejcJRmEZMIQwMwAKLCvAQJDYGAqL5cU7tTqgfKFMhlDQVKrwGqeZYNJrFfTerJ+P09dD3FoeeQjMbRkDrEAzeaLTOTGKbbZkPaHY5x845K43EAl+6PZ6vLgfL4-K6Ih7IiZojEgPHxYqC-AOP5oSlA-t0+iM0Is9mc7wyXkQfmCwgi8VSmVyhVKkgqxjq21anV65OG40QU0Hi1Wm12x2b52u92equdWsaHRfRjI0AhFwJBIzIfIwCERhYBeQghDMYMWzbTA3kIQhkXAVD5RiXAbXkTAzl9WpI1WQwQB6fDsgAZko9w-ULFEbBgCiEGo2iiJWaNezIpioCoyxfjybAAC8dlAHRAmNFjSNBd4oCk1wFKAA" frameborder="0"></iframe>
+
+<iframe width="800" height="452" src="https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAEQE9iYxt0YAbAAgCEjHCBzSgGmYBGAVyjMwMANYRm2UbkKNZ9JgDoQvEEkwwA7ggAMGgGa5UCAIwAWDbkYxKCKJiEQAvhtSwoaBAG1Q2EgGGvQkZIB8G4BRu+ogNJBkAGKEAB4xMOgEJGbw-iCo2Fyk8CAAfDHEQmAWHl4QAJLkZOZpGUTE2bmouOkQTTFdhFAAyrUNZABMMYwQMABuECMw3mPFkxpQlLi9xWCE8wD6UIQtme1+ALqu5+ub2yDYRvvEEAUAFgKEmCBXGigYOPg2mRXhBGJwZMxaII7MQJN9eAEgvBzCF0GFioBeDcADDvlWh3ABKMAEAlkMT+WDwpzIAGFFOgJDI0cRmAAyZjdTzSbDM546ZgQXYAK2w8AAOsQALLpeDszBoVDMJlOBQAajRYHExCQKq6PXFAHkoCDMDK0bhKMwjJhCGBmABRIV4CBIbAwFSfLgnNodUD5QpkMoaCpVZE1Jb1RrFfRerJ+X3ddB3ZoeeTDUaRkBrEDTOYLdMTGIbLZkXYHI4xs45S7XEBFu4PJ4vLjvT7fS4I+5I8ao9EgXHxYoC-AOX5oCmA3u0+gM0LMtkc7wyHkQPkCwjCsWS6Wy+WKkjKxhqm2a7W6xMGo0QE1782W622h3rp0ut0eisdasaHSfRhI0BCXAkHDMh8jAIRGFgZ5CCEMwgybFtMFeQhCCRcBkLlGJcGteRMFOH08nzeBDBAbpcOyABmcj3F9QiURImAyIQSjqII8MVm7ejGPgcjLB+PJsAAL22UAdECI0mOIkE3igCTXDkoA" frameborder="0"></iframe>
+
+Notice that there is a lot less stability when the requirement to be stationary is more restrictive, which is to be
+expected.
+
+<br>
+
+and Part C:
+
+<iframe width="800" height="452" src="https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAEQE9iYxt0YAbAAgCEjHCBzSgGmYBGAVyjMwMANYRm2UbkKNZ9JgDoQvEEkwwA7ggAMGgGa5UCAIwAWDbkYxKCKJiEQAvhtSwoaBAG1Q2EgGGvQkZIB8G4BRu+ogNJBkAGKEAB4xMOgEJGbw-iCo2Fyk8CAAfDHEQmAIAEweXhAAkuRk5mkZRMTZuai46RAtMT2EUADK9U1k1TGMEDAAbhBjMN4TxVMaUJS4-cVghAsA+lCEbZmdfgC6rhcbWzsg2EYHxBAFABYChJgg1xooGDh8B0yG8IIxODJmLRBHZiBIfrwAkF4OYQugwsVALwbgAYd8q0e4AJRgAgEshi-yweDOZAAwop0BIZOjiMwAGTMXqeaTYFkvHTMCB7ABW2HgAB1iABZdLwDmYNCoZjMpwKADU6LA4mISFVPT6EoA8lBQZhZejcJRmEZMIQwMwAKLCvAQJDYGAqL5cU4dLqgfKFMhlDQVKrwWp5cbNYr6b1ZPx+3roe6tDzyUaRybTWYLJYrKMgdYgTbbMh7Q7HWPnHJXG5Fu5kR7PV5cD5fH5XREPZHh0JFEB4+LFQX4Bx-NCUoEYkB0+iM3tsjkwLkyXkQfmCwgi8VSmVyhVKkgqxjq21anV6pOG40QU0Hi1Wm12x2b52u92eytdGsaHRfRjI0AhFwJBlnufIwCERhYBeQghDMYNm1bTA3kIQhkXAVD5RiXAbXkTAzl9CNQNWQwQF6fDsnMAB2dw-QzFEbBgCiEAAVksWiiLzGpGOYsMAE5fjybAAC8dlAHRAmNBAAGZSNBd4oBk-RXBUoA" frameborder="0"></iframe>
+
+It behaves almost identically to the previous part C, just a little skinnier.
+
+## Problem 2: Build your own model!
+
