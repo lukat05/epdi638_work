@@ -210,3 +210,163 @@ It behaves almost identically to the previous part C, just a little skinnier.
 # Part 2!
 
 ## Problem 1:
+
+### Part A:
+
+The properties of the agent can be defined as follows:
+
+- The self.x represents a random 2D position that the agent takes
+- The selv.v represents a velocity vector that is initialized via speed and direction
+- The self.xs and self.ys represents the lists storing the positions of the agent at each time step for each axis
+
+The actions of the agent are as follows:
+
+- The Accelerate function ing the physical computation of the center of mass of the swarm and directs the velocity
+vector towards it, representing an attraction
+- The Move function updates the list of positions and keeps only the ten most recent positions.
+
+### Part B:
+
+![Here is a sample run after 30 Timesteps!](images\lab_1_p2_1b.png)
+
+### Part C:
+
+Here is the updated initialize function for the 10 x 10 grid:
+
+```{python}
+def initialize():
+    global agents
+    agents = [agent() for _ in range(50)]
+    for a in agents:
+        a.x = np.random.rand(2) * 10
+        a.xs = [a.x[0]]
+        a.ys = [a.x[1]]
+```
+
+And here is the resulting 30th timestep:
+
+![30th timestep of a sample run of the model on a 10x10 grid:](images\lab_1_p2_1c_10x10.png)
+
+On a similar note, here is the code and 30th timestep of the 100x10 grid!
+
+```{python}
+def initialize():
+    global agents
+    agents = [agent() for _ in range(50)]
+    for a in agents:
+        a.x = np.random.rand(2) * 100 #Note the change!!!
+        a.xs = [a.x[0]]
+        a.ys = [a.x[1]]
+```
+![30th timestep of a sample run of the model on a 100x100 grid:](images\lab_1_p2_1c_100x100.png)
+
+- Do the swarms behave the same for each initial swarm size?
+
+The longer the length of the swarm, the longer it takes for any type of initial convergence to occur. At least at the
+time scaling that we currently have. Mathematically, the models behave the same. However, the larger the models get, the
+more time scaling affects it, especially when we consider the dynamics aspect of it. Think about the swinging pendulum
+problem in elementary ODEs. When you see it in the graph, there are these spirals at certain points along the horizontal
+axis, and depending on your initial point, it takes longer and longer to get caught in one of these spirals. That's
+what's happening here. The bigger models will eventually behave identically to the smaller ones, but it will take some
+more time before it starts centering. It's all an order of *Magnitude*.
+
+- Does the swarm appear to converge back to a swarm of the same size at the end of all three simulations
+(length 1, 10, 100), or does the final swarm size appear to change depending on the initial size?
+
+The swarm size after 30 time steps does matter on the length, as well as the convergence, but I have two hypotheses as
+to why this is. The first is that there is some threshold as to where the vectors of the agents become too great after
+the initial swarm and they shoot off too far from each other to attract again. This is less likely in my opinion, and my
+other theory is that they simply will converge in the long run, but it will just take a longer time to do so. Thus why
+the size of the swarm is different at the end for each size, it hasn't had enough time to converge asymptotically.
+
+### Part D:
+
+```{python}
+def initialize(side_length = 1):
+    global agents
+    agents = [agent() for _ in range(50)]
+    for a in agents:
+      a.x = np.random.rand(2) * side_length #Note the change!!!
+      a.xs = [a.x[0]]
+      a.ys = [a.x[1]]
+    vars = [np.var([a.x for a in agents])]
+```
+
+```{python}
+#| eval: false
+for L in [1, 10, 100]:
+  initialize(side_length=L)
+  vars_over_time = []
+  vars_over_time.append(np.var([a.x for a in agents]))
+
+  for _ in range(timesteps): #timesteps was set to 100 in another cell
+    update()
+    vars_over_time.append(np.var([a.x for a in agents]))
+
+  plt.figure()
+  plt.plot(range(timesteps + 1), vars_over_time)
+  plt.title(f"Variance over time ({L}x{L})")
+  plt.xlabel("time")
+  plt.ylabel("variance")
+  plt.show()
+```
+
+Overall, as we can see from the images below, there is some neat behavior for variance. It appears to converge to
+something in each case, but it's a little tricky to figure out what that is supposed to be.
+
+![](images\lab_1_p2_1d_var_1x1)
+![](images\lab_1_p2_1d_var_10x10)
+![](images\lab_1_p2_1d_var_100x100)
+
+- How does the swarm size change over time?
+
+It starts to converges asymptotically to a general size in all three cases to different sizes. However, the size that it
+becomes heavily depends on its initial conditions, and they all behave a little different in terms of how the variance changes.
+
+- How does it change as you adjust the size of the initial swarm?
+
+The size of the initial swarm heavily impacts how the size changes over time due to the magnitude of the agents acting
+on each other. The increased distance makes agents more susceptible to overshooting and having to turn around and come at
+each other again. This overshooting is positively associated with the initial size.
+
+## Problem 2:
+
+```{python}
+from math import *
+import numpy as np
+import matplotlib.pyplot as plt
+from random import random, randint, choice
+
+# Part A
+def midpoint(p_1, p_2):
+    mid_x = (1/2) * (p_1[0] + p_2[0])
+    mid_y = (1/2) * (p_1[1] + p_2[1])
+    return (mid_x, mid_y)
+
+# Part B
+corner =  [(0, 0),(1, 0), (0.5, sqrt(3) * (1/2))]
+N = 1000
+x = np.zeros(N)
+y = np.zeros(N)
+
+# Part C
+x[0] = random()
+y[0] = random()
+
+# Part D
+for i in range(N):
+    p_2 = choice(corner)
+    p_1 = (x[i], y[i])
+
+    mid = midpoint(p_1, p_2)
+    if i < 999:
+        x[i+1] = mid[0]
+        y[i+1] = mid[1]
+
+# Part E
+plt.figure()
+plt.scatter(x, y, s=5)
+plt.scatter([c[0] for c in corner],[c[1] for c in corner],color="red")
+plt.show()
+
+```
