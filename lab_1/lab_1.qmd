@@ -197,3 +197,16 @@ It behaves almost identically to the previous part C, just a little skinnier.
 
 ## Problem 2: Build your own model!
 
+
+
+
+
+
+
+
+
+
+
+# Part 2!
+
+## Problem 1:
