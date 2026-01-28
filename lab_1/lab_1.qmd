@@ -197,12 +197,14 @@ It behaves almost identically to the previous part C, just a little skinnier.
 
 ## Problem 2: Build your own model!
 
+I wasn't feeling particularly creative, so here's just a hunting game with the rabbit-fox model, except I added food.
+It's really basic and been done a billion times before, but to be honest I don't have the breadth of knowledge (yet) to
+be more creative. (Forgive me for being a *Theory* guy in this instance)
 
+I made it so that foxes have a way higher propensity to die or be born, but there's also more rabbits that will live
+longer. Please enjoy my **VERY** original idea!
 
-
-
-
-
+<iframe width="800" height="720" src="https://ncase.me/sim/?lz=N4IgtgpgLghiBcoAmEDOBjATgSwA5WwHsA7BEAIQBkBBAOQGkACAZQEkBZAQgB1jeBRYlAiZGwgB5RG2YoxjEAnmIiSARoXEAaRugAW8gOYRGmAK4AbNIwBkjCGEIArbI1URzhAO7bm1AGr8NiwAEtQASoEKhKaiqNhgnCCaIEiYMJ4IAAzJAGa4qAgAjNkguOYwCghQZhAAvsmosMIF8ADaoNhIWcnY6CRkSSDEMJBk9vhKqLiEUIMw6AQkLa0AuskoGDj4RKTwILruHtJyYK7lxADWIPUdXfCFPX27IIB8G4A2u4PDo3sAYoSEXXWaCweEWzwAwuZehdpE8grgYI1jDJGMQIJ47A5nPBeOx5vBGLhMGhUDoSNVCOYANR9MBgeRIKlTeYQXgAeSgB0wBL6uCUOUwhFO-CxeAgSGwMAAdIRMAY5gsdstQHEDM8ALyfUxgbogRowYSsAAiZEKCrBytKgtUMFU2ChUEq8EyUoeIHmFoQq2SjtwEDI2ByAH00sQkELrmsQL7-XtA0G0dgDLp1JhIzcQJ0EAAmR79PaAXg3AOA7nxGsZAYVtdtmQM2oJ2ZEh0NhJHhiOE0lkaIx9ic2BxxDx6AJRJJZKEguptPpYaZCPQrOIHK5PMIfMYAqFjBFfb9EulsvlyQ9Sq9KvnsZKUxmzCaEGNussMAAbhBbwb7ybnT6FH6yA5XyDKBCGuTQVSTZ4AD5NWSYhtSKBo7wfPYzWPRUljPK1CBtO0HSdF03RPDC2hVJCvxAbNBhjMgDEIIC6P1YRIx-P842DUNwx1Woo2otiEwgJMU1lUDQCJbDbXtbBHSyKVMkI9DiEtRjP11XiQFo+ig2U5jo1-ct4w4iNuIzLN4AAZjzZ4XkAKN3S2+EA-nEQYNhBbZ8xAJt0BhXpW1sBEkU7VF0UxPsByHEdiVQUkngpKchRnRlmQXdlOREVd103YVRT3SUZTlc1TxIvUL11a8oHfQ0vxKJ9XwqlTv101jwEIQDgJEvUILIaCtR1e5EI-ZCKIK4j2iwnDJOk50pVzd0FKUsiyDMqi9JoujgK0u8dLUgyGSMniVr4xNk1TdqxPGvCZJmojFMw5TkJKNSNPW7TuJY-T2N2riVlekBPFlcw7lAUxcCQD8yDiMALFgNFogKWCBOO2VdH+O5mtlf1kjE6ZME9Iq7qqzGYBxloADYAFYM3xhDSiJqAWmzTJKYW+AZoRYmikZsC9WZiyafZ+AKajOIAC9Y1ATxOk5BAyZKA5BNmAXGdqWogA" frameborder="0"></iframe>
 
 
 
