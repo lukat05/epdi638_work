@@ -231,7 +231,7 @@ vector towards it, representing an attraction
 
 ### Part B:
 
-![Here is a sample run after 30 Timesteps!](images\lab_1_p2_1b.png)
+![Here is a sample run after 30 Timesteps!](images/lab_1_p2_1b.png)
 
 ### Part C:
 
@@ -249,7 +249,7 @@ def initialize():
 
 And here is the resulting 30th timestep:
 
-![30th timestep of a sample run of the model on a 10x10 grid:](images\lab_1_p2_1c_10x10.png)
+![30th timestep of a sample run of the model on a 10x10 grid:](images/lab_1_p2_1c_10x10.png)
 
 On a similar note, here is the code and 30th timestep of the 100x10 grid!
 
@@ -262,7 +262,7 @@ def initialize():
         a.xs = [a.x[0]]
         a.ys = [a.x[1]]
 ```
-![30th timestep of a sample run of the model on a 100x100 grid:](images\lab_1_p2_1c_100x100.png)
+![30th timestep of a sample run of the model on a 100x100 grid:](images/lab_1_p2_1c_100x100.png)
 
 - Do the swarms behave the same for each initial swarm size?
 
@@ -318,9 +318,9 @@ for L in [1, 10, 100]:
 Overall, as we can see from the images below, there is some neat behavior for variance. It appears to converge to
 something in each case, but it's a little tricky to figure out what that is supposed to be.
 
-![](images\lab_1_p2_1d_var_1x1)
-![](images\lab_1_p2_1d_var_10x10)
-![](images\lab_1_p2_1d_var_100x100)
+![](images/lab_1_p2_1d_var_1x1)
+![](images/lab_1_p2_1d_var_10x10)
+![](images/lab_1_p2_1d_var_100x100)
 
 - How does the swarm size change over time?
 

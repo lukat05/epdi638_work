@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a0ea21b0-f396-45be-8c14-a077ff2cb652" name="Changes" comment="Merging" />
+    <list default="true" id="a0ea21b0-f396-45be-8c14-a077ff2cb652" name="Changes" comment="Part 1 Problem 2">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab_1/lab_1.qmd" beforeDir="false" afterPath="$PROJECT_DIR$/lab_1/lab_1.qmd" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -90,6 +93,9 @@
       <updated>1768328068880</updated>
       <workItem from="1768328070583" duration="4355000" />
       <workItem from="1768334948973" duration="4749000" />
+      <workItem from="1768737899327" duration="221000" />
+      <workItem from="1768744093052" duration="99920000" />
+      <workItem from="1769373782871" duration="46756000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commmit">
       <option name="closed" value="true" />
@@ -155,11 +161,54 @@
       <option name="project" value="LOCAL" />
       <updated>1768342918628</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Updates">
+      <option name="closed" value="true" />
+      <created>1769562372560</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1769562372560</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Part 2">
+      <option name="closed" value="true" />
+      <created>1769569434570</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1769569434570</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Part 1 Problem 2">
+      <option name="closed" value="true" />
+      <created>1769569752452</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1769569752452</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Part 1 Problem 2">
+      <option name="closed" value="true" />
+      <created>1769569896158</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1769569896158</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial Commmit" />
@@ -168,9 +217,12 @@
     <MESSAGE value="Deleted File" />
     <MESSAGE value="Testing things out" />
     <MESSAGE value="Merging" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merging" />
+    <MESSAGE value="Updates" />
+    <MESSAGE value="Part 2" />
+    <MESSAGE value="Part 1 Problem 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="Part 1 Problem 2" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/epdi638_work$main.coverage" NAME="main Coverage Results" MODIFIED="1768334858998" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/epdi638_work$main.coverage" NAME="main Coverage Results" MODIFIED="1769373885364" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
