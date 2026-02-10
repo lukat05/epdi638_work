@@ -37,6 +37,7 @@ jupyter: python3
 ```{python}
 import matplotlib.pyplot as plt
 import numpy as np
+from pylab import *
 def Initialize():
     global grid, ant, step
     grid = np.zeros([11, 11])
@@ -97,7 +98,6 @@ Observe()
 ```{python}
 import matplotlib.pyplot as plt
 import numpy as np
-import pycxsimulator
 from pylab import *
 def Initialize():
     global grid, ant, step
@@ -152,11 +152,116 @@ Initialize()
 for _ in range(2000):
     Update()
 Observe()
-pycxsimulator.GUI().start(func=[initialize, observe, update])
 ```
 
 # Problem 3
 
+```{python}
+from math import *
+import numpy as np
+import matplotlib.pyplot as plt
+import networkx as nx
+
+g = nx.read_gml('polbooks.gml')
+pos=nx.spring_layout(g)
+nx.draw_networkx(g, pos, with_labels = False, node_size = 100)
+plt.show()
+```
+## A)
+
+```{python}
+deg_seq = [d for n, d in g.degree()]
+
+plt.hist(deg_seq)
+plt.title("Degree distribution (Linear)")
+plt.xlabel("Degree")
+plt.ylabel("Frequency")
+plt.show()
+```
+
+```{python}
+import collections
+
+degree_counts = collections.Counter(deg_seq)
+x, y =zip(*degree_counts.items())
+
+plt.scatter(x, y)
+plt.title("Degree distribution (Logarithmic)")
+plt.xscale('log')
+plt.yscale('log')
+plt.xlabel("np.log(Degree)")
+plt.ylabel("Frequency")
+plt.show()
+```
+
+## B)
+
+For this part, I decided to use Eigenvector centrality.
+
+```{python}
+centrality = nx.eigenvector_centrality_numpy(g)
+node_colors = [centrality[node] for node in g.nodes()]
+pos = nx.spring_layout(g)
+nodes = nx.draw_networkx(
+    g, pos,
+    with_labels=False,
+    node_size=100,
+    node_color=node_colors,
+    cmap=plt.cm.viridis
+)
+
+
+sorted_centrality = sorted(centrality.items(), key=lambda item: item[1], reverse=True)
+for node, score in sorted_centrality[:5]:
+    print(f"Book {node}: {score:.4f}")
+```
+
+## C)
+
+```{python}
+pos = nx.spring_layout(g)
+node_colors = []
+for n, v in g.nodes(data=True):
+    if v['value'] == 'n': node_colors.append('gray')
+    elif v['value'] == 'c': node_colors.append('red')
+    elif v['value'] == 'l': node_colors.append('blue')
+
+nodes = nx.draw_networkx(
+    g, pos,
+    with_labels=False,
+    node_size=100,
+    node_color=node_colors
+)
+
+nx.attribute_assortativity_coefficient(g, 'value')
+```
 
 
 # Problem 4
+
+PLEASE NOTE: If this project sounds like Deepan Islam's, it's because we are working together on it. Shout out to him
+fir finding the cool paper we're going to analyze together, and I hope that as an undergraduate, I can learn alot from
+my PhD student counterpart!
+
+## A)
+
+I'm really interested in getting more involved in epidemiological modeling and disease/pathogen dynamics, since it is an
+area that I myself have not had much exposure to. When talking with Deepan, he brought up his own expertise in the area,
+and we agreed that we'd be a good fit as partners. He introduced me to the first paper on Phylodynamics that you see
+in part B below, and from there we just felt that it would be a good fit for us both in terms of interests and
+abilities!
+
+## B)
+
+Here are the two papers that we found!
+
+1. Phylodynamics on local sexual contact networks David A. Rasmussen et al. (2017) develop a probabilistic framework
+linking local sexual contact network structure to coalescent/phylogenetic patterns, and show how network properties can
+be estimated (likelihood-based) from pathogen phylogenies, with an HIV-1 Switzerland application.
+https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005448
+
+2. Nonparametric inference of interaction laws in systems of agents from trajectory data Fei Lu et al. (2019) propose a
+nonparametric method to infer pairwise-distance interaction kernels from observed multi-agent trajectories, with theory
+and demonstrations across some classic systems like Cucker-Smale flocking.
+
+## C)
