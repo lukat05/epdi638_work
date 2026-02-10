@@ -1,0 +1,11 @@
+---
+title: "EPID 638/CMPLXSYS 530 Lab 1"
+author: Luka Todorovic
+date: "January 28, 2026"
+format:
+  html:
+    toc: false
+    number-sections: true
+    colorlinks: true
+jupyter: python3
+---
