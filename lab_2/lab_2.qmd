@@ -216,7 +216,7 @@ def Update():
 Initialize()
 for _ in range(200):
     Update()
-Observe()
+    Observe()
 ```
 
 ## B)
@@ -290,7 +290,7 @@ def Update():
 Initialize()
 for _ in range(5000):
     Update()
-Observe()
+    Observe()
 ```
 
 # Problem 3
