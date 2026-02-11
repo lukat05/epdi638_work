@@ -14,25 +14,155 @@ jupyter: python3
 
 ## A)
 
+There are 8 possible configurations to go through:
 
+111 -> 0
+110 -> 1
+101 -> 1
+100 -> 1
+011 -> 1
+010 -> 0
+001 -> 1
+000 -> 0
+
+This results in the binary 01111010, which mathematically becomes 0(2**7 + 2**2 + 2**0) + 1(2**6 + 2**5 + 2**4 + 2**3 +
+2**1) = 64 + 32 + 16 + 8 + 2 = 122. Thus is rule 122!
 
 ## B)
 
+As observed in this hellish block of code, there appear to be 8 basins of attractors. For the sake of my sainity, if
+there is a cyclical state that only has two nodes in the cycle, we are calling it an oscillation. We notice there are
+4 cyclical attractors, 3 oscillatory attractors, and 1 stable state attractor. These can be observed in the basin plots
+below. The cyclical attractors appear to have a period length of 6, oscillatory have length 2, and then steady state
+(get this) hs length 1. This generally implies that overall, there is a tendency to have a cyclical dynamic, of which
+the most likely outcome is of period 6. There is some decent weighting to the others, however, due to the size of the
+basins of the attractors.
 
+```{python}
+import matplotlib.pyplot as plt
+import networkx as nx
+import numpy as np
+from numpy import linalg as la
+import math
+import scipy
+from matplotlib.colors import ListedColormap
+
+print(scipy.__version__)
+print(nx.__version__)
+
+neighrule = {
+        (0,0,0):0,
+        (0,0,1):1,
+        (0,1,0):0,
+        (0,1,1):1,
+        (1,0,0):1,
+        (1,0,1):1,
+        (1,1,0):1,
+        (1,1,1):0
+        }
+
+initialcond = [0,0,0,1,0,1,0,1,1,1] # for testing
+
+L = 8
+
+def config2int(config):
+    return int(''.join(map(str, config)),2)
+
+def int2config(x):
+    return [1 if x & 2**i > 0 else 0 for i in range(L - 1, -1, -1)]
+
+def update(config):
+    nextconfig = [0]*L
+    for x in range(L):
+        nextconfig[x] = neighrule[(config[(x - 1) % L],config[x],config[(x + 1) % L])]
+    return nextconfig
+
+#steps = 20
+#output = np.zeros([steps,L])
+#output[0,:] = int2config(2)
+#for i in range(1,steps):
+#    output[i,:] = update(output[i-1,:])
+#plt.cla()
+#cmap = ListedColormap([(0,39/255,76/255), (241/255,196/255,0)])
+#plt.imshow(output, cmap = cmap)
+
+g = nx.DiGraph()
+for x in range(2**L):
+    g.add_edge(x, config2int(update(int2config(x))))
+
+ccs = [cc for cc in nx.connected_components(g.to_undirected())]
+n = len(ccs)
+print(n)
+w = math.ceil(math.sqrt(n))
+h = math.ceil(n / w)
+
+plt.figure(1, figsize = (20,20))
+for i in range(n):
+    plt.subplot(h, w, i + 1)
+    nx.draw_networkx(nx.subgraph(g, ccs[i]), with_labels = True)
+
+plt.show()
+
+print("Undirected graph diameter: ", max([nx.diameter(nx.subgraph(g, ccs[j]).to_undirected()) for j in range(n)])   )
+
+print("Largest directed shortest path:", max([max(j.values()) for (i,j) in nx.shortest_path_length(g)]) )
+
+for i, cc in enumerate(ccs):
+    subg = nx.subgraph(g, cc)
+    attr = set().union(*nx.attracting_components(subg))
+    pos = nx.spring_layout(subg)
+    plt.figure(figsize=(10,7))
+    nx.draw_networkx_nodes(subg, pos, nodelist=(set(subg.nodes()) - attr), node_color='#2F65A7', node_size=300, alpha=0.8)
+    nx.draw_networkx_nodes(subg, pos, nodelist=attr, node_color='#FFCB05', node_size=300, alpha=0.8)
+    nx.draw_networkx_edges(subg, pos, width=1.0, alpha=0.8)
+    plt.title(f'Basin {i}')
+    plt.show()
+```
 
 ## C)
 
+As seen in my code, I chose the initial condition [0, 1, 0, 1, 1, 0, 1, 1].
 
+```{python}
+initialcond = [0, 1, 0, 1, 1, 0, 1, 1]
+L = 8
+
+steps = 20
+output = np.zeros([steps,L])
+output[0,:] = initialcond
+for i in range(1,steps):
+    output[i,:] = update(output[i-1,:])
+plt.cla()
+cmap = ListedColormap([(0,39/255,76/255), (241/255,196/255,0)]) # for fun use maize & blue colors
+plt.imshow(output, cmap = cmap)
+```
 
 ## D)
 
+I chose to analyze the closeness centrality of Basin 4. It appears that the nodes that are attractor nodes appear to
+light up the most, highlighting the idea that they can reach other nodes quicker than those that are not a part of the
+cyclical attractor. They light up brighter based on how many inputs there are in terms of a correlation, which makes
+sense because of the definition of the closeness centrality.
 
+```{python}
+subg = nx.subgraph(g, ccs[4])
+pos = nx.spring_layout(subg)
+attr = set().union(*nx.attracting_components(subg))
 
+node_colors = ['#FFCB05' if n in attr else '#2F65A7' for n in subg.nodes()]
 
+plt.figure(3, figsize = (10,7))
+nx.draw_networkx_nodes(subg, pos, node_color=list(nx.closeness_centrality(subg).values()), node_size=100, alpha=0.8)
+nx.draw_networkx_edges(subg,pos,width=2.0)
+#nx.draw_networkx_labels(subg,pos)
+plt.show()
+```
 
 # Problem 2
 
-## A) Here's my code!
+## A)
+
+Here's my code!
 
 ```{python}
 import matplotlib.pyplot as plt
@@ -91,9 +221,18 @@ Observe()
 
 ## B)
 
-
+Combinatorially, there are 121 cells, so there are 2**121 configurations ofthe grid. Then, assuming only one ant, we
+have it that there are 121 initial positions in four directions, so by the fundamental principle of counting, there are
+484 positions for the ant to take. Again utilizing the fundamental principle of counting, we arrive at a total number
+of (484)*(2**121) possible initial conditions. The fact that I didn't type out the total disgusting number should say
+exactly how infeasible plotting out the phase space for this problem really is computationally and logistically.
 
 ## C)
+
+There appears to be in the early stages some sort of period motion where it will go diagonally through the boundary,
+almost like cycloidal marks from a tornado (If you don't know what these are, trust me when I say they're freaking
+awesome. Also, I'm a weather nerd, so be prepared). The ant will turn in these ovals and progress diagonally in a
+direction, so that is the only periodic or stable motion I noticed. Other than that, I didn't spot anything.
 
 ```{python}
 import matplotlib.pyplot as plt
@@ -149,7 +288,7 @@ def Update():
     step += 1
 
 Initialize()
-for _ in range(2000):
+for _ in range(5000):
     Update()
 Observe()
 ```
@@ -168,6 +307,10 @@ nx.draw_networkx(g, pos, with_labels = False, node_size = 100)
 plt.show()
 ```
 ## A)
+
+This doesn't appear to necessarily be scale-free, as we would want a more linear pattern than this in the data. Though,
+to be fair, I wouldn't really expect this to be because this isn't really following any sort of principle that might
+suggest a power law distribution of some sort.
 
 ```{python}
 deg_seq = [d for n, d in g.degree()]
@@ -196,7 +339,9 @@ plt.show()
 
 ## B)
 
-For this part, I decided to use Eigenvector centrality.
+For this part, I decided to use Eigenvector centrality. These would likely point to the most influential books, given
+that this centrality highlights the most important nodes in a network. Thus, we can see from the output what the top 5
+most influential books around this time were.
 
 ```{python}
 centrality = nx.eigenvector_centrality_numpy(g)
@@ -213,10 +358,14 @@ nodes = nx.draw_networkx(
 
 sorted_centrality = sorted(centrality.items(), key=lambda item: item[1], reverse=True)
 for node, score in sorted_centrality[:5]:
-    print(f"Book {node}: {score:.4f}")
+    print(f"{node}: {score:.4f}")
 ```
 
 ## C)
+
+There is a strong, positive associativity score amongst these customers, and this says that there is a lot more of
+buying books along a similar ideology to each other rather than those that have differing view points. This tends to
+highlight the polarization that comes with American political views in a two-party system.
 
 ```{python}
 pos = nx.spring_layout(g)
@@ -234,6 +383,29 @@ nodes = nx.draw_networkx(
 )
 
 nx.attribute_assortativity_coefficient(g, 'value')
+```
+
+## D)
+
+The two largest communities take on a similar structure to the liberal/conservative structure, whereas the two smaller
+ones appear to be independents that are shown to possibly lean a certain way. Thus, there aren't many diverse opinions
+in the books based on their purchasing history, they tend to be very biased one way or another.
+
+```{python}
+communities = list(nx.algorithms.community.greedy_modularity_communities(g))
+color_map = {}
+for i, community in enumerate(communities):
+    for node in community:
+        color_map[node] = i
+colors = [color_map[n] for n in g.nodes()]
+cmap = plt.get_cmap('rainbow')
+nodes = nx.draw_networkx(
+    g, pos,
+    with_labels=False,
+    node_size=100,
+    node_color=colors,
+    cmap=cmap
+)
 ```
 
 
@@ -265,3 +437,10 @@ nonparametric method to infer pairwise-distance interaction kernels from observe
 and demonstrations across some classic systems like Cucker-Smale flocking.
 
 ## C)
+
+I am not nearly as well-versed in this subject as my counterpart, but from my initial intuition I think there is going
+to be some sort of stochastic processing over a network with agents in the network behaving at certain timesteps. From
+there, we can probably use some sort of kernel methods to determine dynamic conclusions via ODE and stochastic methods.
+I think I would like to determine how the dynamics behave as the networks become wider and/or more interconnected,
+eventually trying to model population dynamics. The agents would be the nodes representing people, the network is the
+environment, and the actions pertain to the pathogen and the results thereof.
