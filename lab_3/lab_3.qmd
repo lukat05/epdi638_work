@@ -14,11 +14,192 @@ jupyter: python3
 
 ## Part A
 
+We know that by the properties of the Erdos-Renyi network, that the expected number of edges is
+
+<center>
+$p_e \cdot \binom{N}{2} = p_e \frac{N(N-1)}{2}$
+
+</center>
+
+Further, we know that the total degrees in the graph is twice the total number of edges. Thus, we can use simple rules
+of probability to compute
+
+<center>
+$\langle k \rangle = \frac{2p_e\frac{N(N-1)}{2}}{N} = p_e(N-1)$
+
+</center>
+
 ## Part B
 
-## Part C
+We will impliment the code as such:
 
-## Part D
+```{python}
+from pylab import *
+from IPython import display
+import networkx as nx
+import numpy as np
+from copy import copy, deepcopy
+import time
+```
+
+```{python}
+N = 100
+
+p_e = 0.06 # probability of edge generation (connection between two people)
+p_i = 0.1 # 0.5 # infection probability per contact - currently set to keep R0 the same as we change N!
+p_r = p_i  # recovery probability
+beta_hat = 0.1
+
+k = round(p_e * (N-1))
+
+R0 = (N-1)*p_e*p_i/p_r
+print(k)
+```
+
+```{python}
+def initialize(beta):
+    global g, nextg, prev, prev_mf, susc_mf
+
+    prev = []    # prevalence (total infected nodes/total nodes) in the network model
+    prev_mf = [] # prevalence (total infected nodes/total nodes) in the mean field model
+    susc_mf = [] # fraction of nodes that are susceptible in the mean field model
+
+    # Initialize network model
+    g = nx.watts_strogatz_graph(N, k, beta)        # start with an ER graph
+    g.pos = nx.spring_layout(g)
+    nx.set_node_attributes(g, 0, 'state')  # everyone starts off susceptible
+    g.nodes[1]['state'] = 1                 # set one node to be infected (index case)
+    g.nodes[2]['state'] = 1
+    g.nodes[3]['state'] = 1
+    g.nodes[4]['state'] = 1
+    nextg = g.copy()
+    nextg.pos = g.pos
+    prev.append(4/len(g.nodes)) # initial prevalence in the real graph
+
+    # Initialize mean field model
+    susc_mf.append((N-1)/N) # initial susceptible fraction in the mean field model
+    prev_mf.append(4/N) # initial prevalence in the mean field model
+```
+
+```{python}
+def update():
+    global g, nextg, prev, prev_mf, susc_mf
+
+    # Update network model
+    curprev = 0
+    nextg = g.copy()
+    nextg.pos = g.pos
+    for a in g.nodes:
+        if g.nodes[a]['state'] == 0: # if susceptible
+            nextg.nodes[a]['state'] = 0
+            for b in g.neighbors(a):
+                if g.nodes[b]['state'] == 1: # if neighbor b is infected
+                    if random() < p_i:
+                        nextg.nodes[a]['state'] = 1
+        elif g.nodes[a]['state'] ==1: # if infected
+            curprev += 1
+            nextg.nodes[a]['state'] = 2 if random() < p_r else 1
+    prev.append(curprev/len(g.nodes()))
+    g = nextg.copy()
+    g.pos = nextg.pos
+
+    # Update mean field model
+    susc_mf.append(susc_mf[-1] - (N-1)*p_e*p_i*prev_mf[-1]*susc_mf[-1])
+    prev_mf.append(prev_mf[-1] + (N-1)*p_e*p_i*prev_mf[-1]*susc_mf[-1] - p_r*prev_mf[-1])
+```
+
+```{python}
+def observe():
+    global g, prev, prev_mf, susc_mf
+    cla()
+    nx.draw(g, cmap = cm.plasma, vmin = 0, vmax = 2,
+            node_color = [g.nodes[i]['state'] for i in g.nodes],
+            pos = g.pos)
+```
+
+
+Now that we have our code ready, we can see that I have set up plots that test for betas ranging from 0 to 0.1 and to 1
+growing by 10% jumps in each gap (i.e. 0, 0.01, ..., 0.1, 0.2, ... 1) along with their plots of prevalence (you may need
+to scroll sideways depending on the size of your monitor/how the HTML renders).
+
+
+```{python}
+#| echo: false
+
+betas = np.concatenate((np.arange(0, 0.1, 0.01), np.arange(0.1, 1.1, 0.1)))
+for beta_hat in betas:
+    plt.figure(figsize=(15, 4))
+    initialize(beta_hat)
+
+    for i in range(25):
+      update()
+      if i == 0 or i == 24:
+        plt.subplot(1, 3, 1 if i == 0 else 2)
+        observe()
+        plt.title(f"Beta: {beta_hat} | Step: {i}")
+
+    plt.subplot(1, 3, 3)
+    epicurve = scatter(range(len(prev)), prev)
+    scatter(range(len(prev_mf)), prev_mf)
+    xlabel("Time")
+    ylabel("Prevalence")
+    show(epicurve)
+
+    plt.tight_layout()
+    plt.show()
+```
+
+## Part C and D (cause I'm like that)
+
+Luckily, the code already has the necessary adjustment in the initialize() function! Thus, we can just impliment the
+sample code as follows:
+
+```{python}
+timesteps = 100  # number of timesteps per simulation
+numsims = 100    # number of simulations to run
+
+betas_deux = [0, 0.01, 0.05, 0.1, 0.5, 1]
+
+for beta_hat in betas_deux:
+    prev_mf = []
+    susc_mf = []
+
+    prevarray = np.zeros([timesteps,numsims])
+    for i in range(0,numsims):        # loop over all simulations
+        initialize(beta_hat)                  # initialize each simulation
+        for j in range(1,timesteps):  # loop over the timesteps for that simulation
+            update()                  # update
+        prevarray[:,i] = prev         # store the resulting simulation in prevarray
+
+    plt.figure(figsize=(10,4))
+
+    plt.subplot(1, 2, 1)
+    for s in range(numsims):
+        plt.plot(prevarray[:, s], '.', alpha=0.3)
+
+    plt.plot(prev_mf, 'k-', linewidth=2, label='Mean-Field')
+    plt.xlabel('Timesteps')
+    plt.ylabel('Fraction Infected')
+    plt.title(f'Erdos-Renyi Model Performance (beta = {beta_hat})')
+    plt.legend()
+
+    plt.subplot(1, 2, 2)
+    median = np.quantile(prevarray, 0.5, axis=1)
+    q05 = np.quantile(prevarray, 0.05, axis=1)
+    q95 = np.quantile(prevarray, 0.95, axis=1)
+    q25 = np.quantile(prevarray, 0.25, axis=1)
+    q75 = np.quantile(prevarray, 0.75, axis=1)
+
+    plt.fill_between(range(timesteps), q05, q95, color='darkblue', alpha=0.3, label='5%-95% Quantile')
+    plt.fill_between(range(timesteps), q25, q75, color='royalblue', alpha=0.3, label='25%-75% Quantile')
+    plt.plot(median, 'b-', label='Median')
+    plt.plot(prev_mf, 'k-', linewidth=2, label='Mean-Field')
+    plt.title(f'Problem 1D: Uncertainty Quantiles (beta={beta_hat})')
+    plt.legend()
+
+    plt.tight_layout()
+    plt.show()
+```
 
 ## Part E
 
