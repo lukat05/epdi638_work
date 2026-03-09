@@ -161,12 +161,11 @@ numsims = 100    # number of simulations to run
 betas_deux = [0, 0.01, 0.05, 0.1, 0.5, 1]
 
 for beta_hat in betas_deux:
-    prev_mf = []
-    susc_mf = []
+
 
     prevarray = np.zeros([timesteps,numsims])
     for i in range(0,numsims):        # loop over all simulations
-        initialize(beta_hat)                  # initialize each simulation
+        initialize(beta_hat)          # initialize each simulation
         for j in range(1,timesteps):  # loop over the timesteps for that simulation
             update()                  # update
         prevarray[:,i] = prev         # store the resulting simulation in prevarray
@@ -180,7 +179,7 @@ for beta_hat in betas_deux:
     plt.plot(prev_mf, 'k-', linewidth=2, label='Mean-Field')
     plt.xlabel('Timesteps')
     plt.ylabel('Fraction Infected')
-    plt.title(f'Erdos-Renyi Model Performance (beta = {beta_hat})')
+    plt.title(f'Watts-Strogatz Model Performance (beta = {beta_hat})')
     plt.legend()
 
     plt.subplot(1, 2, 2)
@@ -201,16 +200,151 @@ for beta_hat in betas_deux:
     plt.show()
 ```
 
+Based on these results, we see that as $\beta \rightarrow 1$, the distribution approached the mean-field model. Thus,
+we match the Watts-Strogatz models similarly tothe mean-field models when $\beta$ is higher, I think a good rough cutoff
+is 0.5 based on my plots.
+
 ## Part E
 
+```{python}
+def initialize_ER():
+    global g, nextg, prev, prev_mf, susc_mf
 
+    prev = []    # prevalence (total infected nodes/total nodes) in the network model
+    prev_mf = [] # prevalence (total infected nodes/total nodes) in the mean field model
+    susc_mf = [] # fraction of nodes that are susceptible in the mean field model
+
+    # Initialize network model
+    g = nx.erdos_renyi_graph(N,p_e)        # start with an ER graph
+    g.pos = nx.spring_layout(g)
+    nx.set_node_attributes(g, 0, 'state')  # everyone starts off susceptible
+    g.nodes[1]['state'] = 1                 # set one node to be infected (index case)
+    g.nodes[2]['state'] = 1
+    g.nodes[3]['state'] = 1
+    g.nodes[4]['state'] = 1
+    nextg = g.copy()
+    nextg.pos = g.pos
+    prev.append(4/len(g.nodes)) # initial prevalence in the real graph
+
+    # Initialize mean field model
+    susc_mf.append((N-1)/N) # initial susceptible fraction in the mean field model
+    prev_mf.append(4/N) # initial prevalence in the mean field model
+
+def update_ER():
+    global g, nextg, prev, prev_mf, susc_mf
+
+    # Update network model
+    curprev = 0
+    nextg = g.copy()
+    nextg.pos = g.pos
+    for a in g.nodes:
+        if g.nodes[a]['state'] == 0: # if susceptible
+            nextg.nodes[a]['state'] = 0
+            for b in g.neighbors(a):
+                if g.nodes[b]['state'] == 1: # if neighbor b is infected
+                    if random() < p_i:
+                        nextg.nodes[a]['state'] = 1
+        elif g.nodes[a]['state'] ==1: # if infected
+            curprev += 1
+            nextg.nodes[a]['state'] = 2 if random() < p_r else 1
+    prev.append(curprev/len(g.nodes()))
+    g = nextg.copy()
+    g.pos = nextg.pos
+
+    # Update mean field model
+    susc_mf.append(susc_mf[-1] - (N-1)*p_e*p_i*prev_mf[-1]*susc_mf[-1])
+    prev_mf.append(prev_mf[-1] + (N-1)*p_e*p_i*prev_mf[-1]*susc_mf[-1] - p_r*prev_mf[-1])
+```
+
+
+
+```{python}
+def simulate():
+    prevarray = np.zeros([timesteps,numsims])
+    for i in range(0,numsims):        # loop over all simulations
+        initialize(beta=1)          # initialize each simulation
+        for j in range(1,timesteps):  # loop over the timesteps for that simulation
+            update()                  # update
+        prevarray[:,i] = prev         # store the resulting simulation in prevarray
+
+plt.figure(figsize=(12,4))
+
+simulate()
+plt.subplot(2, 2, 1)
+for s in range(numsims):
+    plt.plot(prevarray[:, s], '.', alpha=0.3)
+
+plt.plot(prev_mf, 'k-', linewidth=2, label='Mean-Field')
+plt.xlabel('Timesteps')
+plt.ylabel('Fraction Infected')
+plt.title(f'Watts-Strogatz Model Performance (beta = {beta_hat})')
+plt.legend()
+
+plt.subplot(2, 2, 2)
+median = np.quantile(prevarray, 0.5, axis=1)
+q05 = np.quantile(prevarray, 0.05, axis=1)
+q95 = np.quantile(prevarray, 0.95, axis=1)
+q25 = np.quantile(prevarray, 0.25, axis=1)
+q75 = np.quantile(prevarray, 0.75, axis=1)
+
+plt.fill_between(range(timesteps), q05, q95, color='darkblue', alpha=0.3, label='5%-95% Quantile')
+plt.fill_between(range(timesteps), q25, q75, color='royalblue', alpha=0.3, label='25%-75% Quantile')
+plt.plot(median, 'b-', label='Median')
+plt.plot(prev_mf, 'k-', linewidth=2, label='Mean-Field')
+plt.title(f'Problem 1D: Uncertainty Quantiles (beta=1)')
+plt.legend()
+
+
+prevarray = np.zeros([timesteps,numsims])
+for i in range(0,numsims):        # loop over all simulations
+    initialize_ER()          # initialize each simulation
+    for j in range(1,timesteps):  # loop over the timesteps for that simulation
+        update_ER()                  # update
+    prevarray[:,i] = prev         # store the resulting simulation in prevarray
+
+plt.subplot(2, 2, 3)
+for s in range(numsims):
+    plt.plot(prevarray[:, s], '.', alpha=0.3)
+
+plt.plot(prev_mf, 'k-', linewidth=2, label='Mean-Field')
+plt.xlabel('Timesteps')
+plt.ylabel('Fraction Infected')
+plt.title(f'Erdos-Renyi Model Performance (beta = {beta_hat})')
+plt.legend()
+
+plt.subplot(2, 2, 4)
+median = np.quantile(prevarray, 0.5, axis=1)
+q05 = np.quantile(prevarray, 0.05, axis=1)
+q95 = np.quantile(prevarray, 0.95, axis=1)
+q25 = np.quantile(prevarray, 0.25, axis=1)
+q75 = np.quantile(prevarray, 0.75, axis=1)
+
+plt.fill_between(range(timesteps), q05, q95, color='darkblue', alpha=0.3, label='5%-95% Quantile')
+plt.fill_between(range(timesteps), q25, q75, color='royalblue', alpha=0.3, label='25%-75% Quantile')
+plt.plot(median, 'b-', label='Median')
+plt.plot(prev_mf, 'k-', linewidth=2, label='Mean-Field')
+plt.title(f'Problem 1D: Uncertainty Quantiles (beta={1})')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+```
+
+The models appear to BOTH be good fits at these respective parameterizations in terms of the mean fields.
 
 # Problem 2
 
 ## Part A
 
+
+
 ## Part B
+
+
 
 ## Part C
 
+
+
 ## Part D
+
