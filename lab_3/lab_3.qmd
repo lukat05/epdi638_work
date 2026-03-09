@@ -1,0 +1,35 @@
+---
+title: "EPID 638/CMPLXSYS 530 Lab 2"
+author: Luka Todorovic
+date: "March 10, 2026"
+format:
+  html:
+    toc: false
+    number-sections: true
+    colorlinks: true
+jupyter: python3
+---
+
+# Problem 1
+
+## Part A
+
+## Part B
+
+## Part C
+
+## Part D
+
+## Part E
+
+
+
+# Problem 2
+
+## Part A
+
+## Part B
+
+## Part C
+
+## Part D
