@@ -336,7 +336,99 @@ The models appear to BOTH be good fits at these respective parameterizations in 
 
 ## Part A
 
+```{python}
+import matplotlib.pyplot as plt
+import networkx as nx
+import numpy as np
 
+# --- Parameters ---
+N = 100
+m = 2
+mean_cap = 100
+sd_cap = 10
+
+def initialize():
+    global G, time
+    time = 0
+    # 1. Create the Barabasi-Albert network
+    G = nx.barabasi_albert_graph(N, m)
+
+    # 2. Assign attributes to each node
+    for i in G.nodes():
+        cap = np.random.normal(mean_cap, sd_cap)
+        G.nodes[i]['capacity'] = cap
+        # Initial load: 20% to 100% of capacity
+        G.nodes[i]['load'] = np.random.uniform(0.2 * cap, cap)
+        G.nodes[i]['state'] = 'running'
+```
+
+```{python}
+def observe():
+    plt.cla()
+    # Color nodes: Green for running, Red for failed
+    colors = []
+    cmap = cm.get_cmap('RdYlGn_r')
+
+    for i in G.nodes():
+        if G.nodes[i]['state'] == 'failed':
+            # Assign Black to failed nodes
+            colors.append('black')
+        else:
+            # Clip at 1.0 just in case a node is over capacity but hasn't updated yet
+            ratio = G.nodes[i]['load'] / G.nodes[i]['capacity']
+            ratio = max(0, min(ratio, 1.0))
+            colors.append(cmap(ratio))
+
+    pos = nx.spring_layout(G)
+    nx.draw(G, pos, node_color=colors, with_labels=False, node_size=100)
+    plt.title(f'Time: {time}')
+    plt.show()
+```
+
+```{python}
+def update():
+    global time
+    time += 1
+
+    # Identify nodes that will fail this step
+    to_fail = []
+    for i in G.nodes():
+        if G.nodes[i]['state'] == 'running':
+            if G.nodes[i]['load'] > G.nodes[i]['capacity']:
+                to_fail.append(i)
+
+    # Process the failures synchronously
+    for i in to_fail:
+        G.nodes[i]['state'] = 'failed'
+        neighbors = list(G.neighbors(i))
+        if neighbors:
+            # Distribute load evenly to all neighbors
+            shared_load = G.nodes[i]['load'] / len(neighbors)
+            for n in neighbors:
+                G.nodes[n]['load'] += shared_load
+            G.nodes[i]['load'] = 0
+```
+```{python}
+# --- Manual Trigger for Cascade ---
+def trigger_failure():
+    # Pick a random node and force it over capacity
+    node_id = np.random.choice(G.nodes())
+    G.nodes[node_id]['load'] = G.nodes[node_id]['capacity'] + 1
+    print(f"Triggered failure at node {node_id}")
+```
+
+```{python}
+initialize()
+for timestep in range(50):
+    update()
+    observe()
+
+trigger_failure()
+
+for timestep in range(50):
+    update()
+    observe()
+```
 
 ## Part B
 
