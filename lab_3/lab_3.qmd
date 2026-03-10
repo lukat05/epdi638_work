@@ -336,6 +336,11 @@ The models appear to BOTH be good fits at these respective parameterizations in 
 
 ## Part A
 
+Generally, there are no initial failures, but the second that one fails there is a general diffusive chain reaction of
+failures along networks that can ve at varying levels of magnitudes, and it seems heavily dependent on what nodes have
+previously failed and where they were connected. If one node is connected to more than one failed node, it is more
+likely that node also fails.
+
 ```{python}
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -418,25 +423,237 @@ def trigger_failure():
 ```
 
 ```{python}
-initialize()
-for timestep in range(50):
-    update()
+for _ in range(5):
+    initialize()
+    for timestep in range(25):
+        update()
+
     observe()
 
-trigger_failure()
+    trigger_failure()
 
-for timestep in range(50):
-    update()
+    for timestep in range(25):
+        update()
     observe()
 ```
 
 ## Part B
 
+As we adjust the lower bound, we notice that the closer the networks are to running at capacity initially, the more
+likely it is that there is a large-scale network failure dynamically. The cascade failures are more common for
+simulations that encourage initial node operations at or near capacity. This suggests that we should generally try to
+find a balance between how much power is generated at each node to be enough to sufficiently power everything, but at
+the same time discourage a high frequency of nodes operating at higher percentages of capacity, because that increases
+the likelihood and magnitude of cascade failures as a general rule.
 
+```{python}
+def initialize():
+    global G, time
+    time = 0
+    # 1. Create the Barabasi-Albert network
+    G = nx.barabasi_albert_graph(N, m)
 
-## Part C
+    # 2. Assign attributes to each node
+    for i in G.nodes():
+        cap = np.random.normal(mean_cap, sd_cap)
+        G.nodes[i]['capacity'] = cap
+        # Initial load: 10% to 100% of capacity
+        G.nodes[i]['load'] = np.random.uniform(0.1 * cap, cap)
+        G.nodes[i]['state'] = 'running'
 
+for _ in range(3):
+    initialize()
+    for timestep in range(25):
+        update()
 
+    observe()
 
-## Part D
+    trigger_failure()
 
+    for timestep in range(25):
+        update()
+    observe()
+```
+
+```{python}
+def initialize():
+    global G, time
+    time = 0
+    # 1. Create the Barabasi-Albert network
+    G = nx.barabasi_albert_graph(N, m)
+
+    # 2. Assign attributes to each node
+    for i in G.nodes():
+        cap = np.random.normal(mean_cap, sd_cap)
+        G.nodes[i]['capacity'] = cap
+        # Initial load: 50% to 100% of capacity
+        G.nodes[i]['load'] = np.random.uniform(0.5 * cap, cap)
+        G.nodes[i]['state'] = 'running'
+
+for _ in range(3):
+    initialize()
+    for timestep in range(25):
+        update()
+
+    observe()
+
+    trigger_failure()
+
+    for timestep in range(25):
+        update()
+    observe()
+```
+
+```{python}
+def initialize():
+    global G, time
+    time = 0
+    # 1. Create the Barabasi-Albert network
+    G = nx.barabasi_albert_graph(N, m)
+
+    # 2. Assign attributes to each node
+    for i in G.nodes():
+        cap = np.random.normal(mean_cap, sd_cap)
+        G.nodes[i]['capacity'] = cap
+        # Initial load: 80% to 100% of capacity
+        G.nodes[i]['load'] = np.random.uniform(0.8 * cap, cap)
+        G.nodes[i]['state'] = 'running'
+
+for _ in range(3):
+    initialize()
+    for timestep in range(25):
+        update()
+
+    observe()
+
+    trigger_failure()
+
+    for timestep in range(25):
+        update()
+    observe()
+```
+
+## Part C and D
+
+When plotting the log-log, it appears that the network is scale-free, which is really nice! However, the network looks
+a little different than what we were simulating before. It's a lot more organized, which makes sense because, unlike
+previously, this network is accounting for spatial components such as geography and local infrastructure. Because of
+this, the network presents itself almost like a ring with some connections, or a small-world network with a low
+probability of being rewired.
+
+As for the robustness, we have a weird scenario in the case we've chosen. This network likes to fail, with about half of
+the time more than 10% of the nodes implode. However, this also looks to have an exponential distribution, as in we are
+not as likely to have a more extreme failure. This kind of reminds me of the power-law distribution, and it might have
+<i>something </i> to do with it, but nevertheless here it is!
+
+```{python}
+import os
+
+def initialize():
+    global G, time
+    time = 0
+
+    G = nx.read_gml(os.path.join(os.getcwd() ,'power.gml'),label='id')
+    for i in G.nodes():
+        cap = np.random.normal(mean_cap, sd_cap)
+        G.nodes[i]['capacity'] = cap
+
+        G.nodes[i]['load'] = np.random.uniform(0.5 * cap, cap)
+        G.nodes[i]['state'] = 'running'
+
+def observe():
+    plt.cla()
+    # Color nodes: Green for running, Red for failed
+    colors = []
+    cmap = cm.get_cmap('RdYlGn_r')
+
+    for i in G.nodes():
+        if G.nodes[i]['state'] == 'failed':
+            # Assign Black to failed nodes
+            colors.append('black')
+        else:
+            # Clip at 1.0 just in case a node is over capacity but hasn't updated yet
+            ratio = G.nodes[i]['load'] / G.nodes[i]['capacity']
+            ratio = max(0, min(ratio, 1.0))
+            colors.append(cmap(ratio))
+
+    pos=nx.spectral_layout(G)
+    nx.draw(G, pos, node_color=colors, with_labels=False, node_size=100)
+    plt.title(f'Time: {time}')
+    plt.show()
+
+    if time == 0:
+        degrees = [d for n, d in G.degree()]
+        unique_degrees, counts = np.unique(degrees, return_counts=True)
+        mask = unique_degrees > 0
+        unique_degrees = unique_degrees[mask]
+        counts = counts[mask]
+
+        plt.figure(figsize=(8,6))
+        plt.scatter(unique_degrees, counts, color='b', s=20)  # 's'=markersize
+        plt.xscale('log')
+        plt.yscale('log')
+        plt.xlabel("Degree (k) [Log Scale]", fontsize=12)
+        plt.ylabel("Number of Nodes (Frequency) [Log Scale]", fontsize=12)
+        plt.title("Network Degree Distribution (Log-Log Plot)", fontsize=14)
+        plt.grid(True, which="both", ls="--", alpha=0.5)
+        plt.tight_layout()
+        plt.show()
+
+for _ in range(3):
+    initialize()
+    observe()
+
+    for timestep in range(25):
+        update()
+
+    observe()
+
+    trigger_failure()
+
+    for timestep in range(25):
+        update()
+
+    observe()
+```
+
+```{python}
+
+#Histogram of Cascades
+
+sims = 250
+cascade_counts = []
+
+for _ in range(sims):
+    initialize()
+    for timestep in range(50):
+        update()
+
+    trigger_failure()
+
+    for timestep in range(50):
+        update()
+
+    count = 0
+
+    for i in G.nodes:
+        if G.nodes[i]['state'] == 'failed':
+            count += 1
+
+    cascade_counts.append(count)
+
+nodes_len = G.number_of_nodes()
+threshold = 0.1 * nodes_len
+num_exceed = np.sum(np.array(cascade_counts) > threshold)
+
+plt.hist(cascade_counts, bins = 20)
+plt.xlabel("Number of failures")
+plt.ylabel("Frequency")
+plt.axvline(threshold, color='red', linestyle='dashed', linewidth=1)
+plt.show()
+
+percentage = 100 * num_exceed / sims
+
+print(f"{percentage:.2f}% of simulations result in 10% or more nodes failing")
+print(cascade_counts)
+```
