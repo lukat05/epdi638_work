@@ -15,12 +15,12 @@ from IPython import display
 import time
 import multiprocessing as mp
 
-# %matplotlib inline
-
-
 # Parameters
 
-nr = 500. # carrying capacity of rabbits ***
+nr = 500
+dfs = [0.01, 0.025, 0.05, 0.1, 0.15, 0.2, 0.3] # Sweep range for fox death rate
+sim_pred_means = []
+sim_prey_means = []
 
 r_init = 100 # initial rabbit population
 mr = 0.03 # magnitude of movement of rabbits
@@ -29,13 +29,10 @@ rr = 0.1 # reproduction rate of rabbits
 
 f_init = 30 # initial fox population
 mf = 0.05 # magnitude of movement of foxes
-df = 0.1 # death rate of foxes when there is no food ***
 rf = 0.5 # reproduction rate of foxes ***
 
 cd = 0.02 # radius for collision detection
 cdsq = cd ** 2
-
-
 
 # Model Functions
 
@@ -132,62 +129,47 @@ def update_one_agent():
             if random.random() < rf:
                 agents.append(cp.copy(ag))
 
-# Simulations
 
-all_sim_rdata = []
-all_sim_fdata = []
+def run_single_simulation(df_val):
+    global df, nr
+    df = df_val
+    nr = 500.  # Ensuring nr stays fixed at 500
 
-for sim in range(10):
-    frames = []
     initialize()
-    for _ in range(1000):
+    for _ in range(400):
         update()
-        if _ % 5 == 0:
-            frames.append(observe())
-        # time.sleep(0.1)
 
-    all_sim_rdata.append(list(rdata))
-    all_sim_fdata.append(list(fdata))
+    # Return final counts for prey and predator
+    return rdata[-1], fdata[-1]
 
-    fps = 10
-    normal_delay = 1000 / fps  # 100ms per frame
-    final_pause = 2000  # 2000ms (2 seconds) pause at the end
 
-    # 3. Create the duration list: all frames are fast, last one is slow
-    durations = [normal_delay] * (len(frames) - 1) + [final_pause]
+if __name__ == '__main__':
+    # Using multiprocessing to run the sweep
+    with mp.Pool(processes=4) as pool:
+        for _df in dfs:
+            # Running 5 simulations per df value to account for stochasticity
+            results = pool.map(run_single_simulation, [_df] * 5)
+            prey_vals = [res[0] for res in results]
+            pred_vals = [res[1] for res in results]
 
-    iio.imwrite(f'images/simulation_{sim + 1}.gif', frames, loop=0, duration=durations, fps=fps)
+            sim_prey_means.append(np.mean(prey_vals))
+            sim_pred_means.append(np.mean(pred_vals))
 
-# --- Generate Aggregate Comparison GIF ---
-agg_frames = []
-fig_agg = plt.figure(figsize=(10, 6))
+    # Calculate Regression lines
+    beta_pred, a_pred = np.polyfit(dfs, sim_pred_means, 1)
+    beta_prey, a_prey = np.polyfit(dfs, sim_prey_means, 1)
 
-# Determine the max length and max population for axis limits
-max_steps = 1000
-max_pop = max([max(r) for r in all_sim_rdata] + [max(f) for f in all_sim_fdata])
+    # Visualization
+    plt.figure(figsize=(10, 6))
+    plt.scatter(dfs, sim_pred_means, color='orange', label='Predator Averages')
+    plt.scatter(dfs, sim_prey_means, color='blue', label='Prey Averages')
 
-print("Generating aggregate GIF...")
+    plt.plot(dfs, beta_pred * np.array(dfs) + a_pred, color='orange', linestyle='--', label='Predator LSRL')
+    plt.plot(dfs, beta_prey * np.array(dfs) + a_prey, color='blue', linestyle='--', label='Prey LSRL')
 
-for t in range(0, max_steps, 10):  # Step by 10 to keep file size small
-    plt.clf()
-
-    for i in range(len(all_sim_rdata)):
-        # Plot Prey (Solid lines) and Predators (Dashed lines)
-        # Using same index 'i' ensures the same color for prey/predator of one sim
-        p = plt.plot(all_sim_rdata[i][:t], label=f'Sim {i + 1}' if t == 0 else "")
-        color = p[0].get_color()
-        plt.plot(all_sim_fdata[i][:t], color=color, linestyle='--')
-
-    plt.title("Comparison of All Simulations (Solid: Prey, Dashed: Predator)")
-    plt.xlabel("Time Steps")
-    plt.ylabel("Population")
-    plt.xlim(0, max_steps)
-    plt.ylim(0, max_pop + 10)
-
-    # Capture frame
-    fig_agg.canvas.draw()
-    image = np.frombuffer(fig_agg.canvas.tostring_rgb(), dtype='uint8')
-    image = image.reshape(fig_agg.canvas.get_width_height()[::-1] + (3,))
-    agg_frames.append(image)
-
-iio.imwrite('images/all_simulations_comparison.gif', agg_frames, loop=0, fps=15)
+    plt.xlabel('DF')
+    plt.ylabel('Mean Final Population')
+    plt.title('Sensitivity Analysis: Impact of Fox Death Rate on Populations')
+    plt.legend()
+    plt.savefig('images/df_LSRL.png', dpi=300)
+    plt.show()
